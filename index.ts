@@ -5,12 +5,16 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
 function createToken(id: number) {
-  const token = jwt.sign({ id: id }, 'shhhh', { expiresIn: '3days' });
+  //@ts-ignore
+  const token = jwt.sign({ id: id }, process.env.MY_SECRET, {
+    expiresIn: '3days'
+  });
   return token;
 }
 
 async function getUserFromToken(token: string) {
-  const data = jwt.verify(token, 'shhhh');
+  //@ts-ignore
+  const data = jwt.verify(token, process.env.MY_SECRET);
   const user = await prisma.user.findUnique({
     // @ts-ignore
     where: { id: data.id },
